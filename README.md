@@ -1,6 +1,6 @@
 ## Usage:
 
-### 0x01 上传so文件至 `/data/local/tmp` 目录
+### 0x01 上传so文件 (frida_fart.zip) 至 `/data/local/tmp` 目录
 
 建议：先上传tmp目录，再su 切换root账号，然后将 so文件 移动至 `/data/app` 目录
 
@@ -39,7 +39,7 @@ Binary file ./10179140_loadMethod.dex matches
 Binary file ./2147368_26353.dex matches
 Binary file ./2147368_loadMethod.dex matches
 ```
-发现 2147368_26353.dex 无法用 jadx打开
+发现 `2147368_26353.dex` 无法用 `jadx` 打开
 
 尝试添加dex头 `64 65 78 0A 30 33 37`
 
