@@ -1,3 +1,55 @@
+## Usage:
+
+### 0x01 上传so文件至 `/data/local/tmp` 目录
+
+建议：先上传tmp目录，再su 切换root账号，然后将 so文件 移动至 `/data/app` 目录
+
+### 0x02 上传frida-server 至 /data/local/tmp
+
+`adb push frida-server /data/local/tmp`
+
+### 0x03 加载js，进行自动化脱壳
+
+`frida -F ctf.crack.vulcrack -l frida_fart_hook.js -U --no-pause`
+
+然后运行 `fart()`  函数
+
+```
+[Pixel 2::vulcrack]-> fart()
+[dumpdex]: /sdcard/10179140_loadMethod.dex
+got a dex: 0x7d3bccd020 10179140
+[dumpdex]: /sdcard/3016944_loadMethod.dex
+got a dex: 0x7d3d35c01c 3016944
+start dump all CodeItem.......
+[dumpdex]: /sdcard/10179140_26353.dex
+[dumpdex]: /sdcard/3016944_26353.dex
+end dump all CodeItem.......
+startdealwithclassloader: dalvik.system.PathClassLoader[DexPathList[[directory "."],nativeLibraryDirectories=[/system/lib64, /system/lib64]]]
+```
+![](./fart.png)
+
+## 0x04 寻找需要的dex文件
+`grep -r "MainActivity" -n ./*.dex`
+
+```
+grep -r "MainActivity" -n ./*.dex
+
+Binary file ./10179140_26353.dex matches
+Binary file ./10179140_loadMethod.dex matches
+Binary file ./2147368_26353.dex matches
+Binary file ./2147368_loadMethod.dex matches
+```
+发现 2147368_26353.dex 无法用 jadx打开
+
+尝试添加dex头 `64 65 78 0A 30 33 37`
+
+![](./dex.png)
+
+再次尝试用jadx打开，成功看到反编译的java代码
+
+![](./dex_fix.png)
+
+
 # FART
 ART环境下基于主动调用的自动化脱壳方案，基于Android 6.0实现，理论上可以移植到任何ART系统上，现在已经移植到Android 8.0，很快就将移植到Android 10.0。具体原理和实现请移步看雪，系列文章共计3篇，对加固和对抗感兴趣的可以看看：
 
